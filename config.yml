@@ -1,0 +1,39 @@
+---
+helpers:
+  - asd.js
+
+data:
+  simpleRequest:
+    type: json
+    url: https://api.tiexo.com/account/BSRV62KC5VCdVkE4LtgEVehDeGNo2FeWBZ6oVdZXy6Zn/nfts?offset=0&limit=100&sortType=desc&sortBy=creationDate&filter%5Bcoll%5D=cryptonauts
+    interval: 15s
+  solAddressBalance:
+    type: jsonrpc
+    url: https://api.mainnet-beta.solana.com
+    method: getBalance
+    params:
+      - 9AVaowib8ePah1VdJft6mgZtYQcHgLA4y1TAEV22Jhan
+    interval: 15s
+  solVersion:
+    type: jsonrpc
+    url: https://api.mainnet-beta.solana.com
+    method: getVersion
+    interval: 15s
+metrics:
+  balance:
+    type: gauge
+    labels: ["address"]
+    help: "Lorem Ipsum"
+    values:
+      - labels:
+          address: "$config.solAddressBalance.params[0]"
+        value: "$data.solAddressBalance.data.result.value"
+  version:
+    type: gauge
+    help: "Node version"
+    labels:
+      - version
+    values:
+      - labels:
+          version: "$data.solVersion.data.result['solana-core']"
+        value: "1"
