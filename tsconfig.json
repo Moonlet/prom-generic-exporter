@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "noUnusedLocals": false,
+    "outDir": "build",
+    "sourceMap": true,
+    "target": "es2017",
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true
+  },
+  "compileOnSave": true,
+  "include": ["src/**/*.ts"],
+  "exclude": [
+        "node_modules",
+        "build"
+    ]
+}

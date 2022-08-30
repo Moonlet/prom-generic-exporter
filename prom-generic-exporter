@@ -1,0 +1,5 @@
+#!/bin/bash
+
+BIN_PATH=$(dirname $0)
+
+(cd $BIN_PATH && node_modules/.bin/node index.js)
