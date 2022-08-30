@@ -34,20 +34,40 @@ const getMetricValueSchema = (withLoop: boolean) =>
     labels: Joi.alternatives(
       Joi.array().items(Joi.string()),
       Joi.object().pattern(Joi.string(), Joi.string())
-    ).required(),
+    ).when("value", {
+      is: Joi.exist(),
+      then: Joi.required(),
+      otherwise: Joi.forbidden(),
+    }),
     value: withLoop ? Joi.string() : Joi.string().required(),
   });
 
-const metricValueTypeSchema = getMetricValueSchema(true)
-  .append({
-    loop: Joi.object({
-      on: Joi.string().required(),
-      as: Joi.string().optional(),
-      where: Joi.string().optional(),
-      values: getMetricValueSchema(false),
-    }),
-  })
-  .or("loop", "value");
+const metricValueTypeSchema = Joi.object({
+  loop: Joi.object({
+    on: Joi.string().required(),
+    as: Joi.string().optional(),
+    where: Joi.string().optional(),
+    values: Joi.link("#values-schema"),
+  }),
+  value: Joi.string(),
+  labels: Joi.alternatives(
+    Joi.array().items(Joi.string()),
+    Joi.object().pattern(Joi.string(), Joi.string())
+  ).when("value", {
+    is: Joi.exist(),
+    then: Joi.required(),
+    otherwise: Joi.forbidden(),
+  }),
+})
+  .oxor("loop", "value")
+  .min(1);
+
+const metricsValuesSchema = Joi.alternatives(
+  metricValueTypeSchema,
+  Joi.array().items(metricValueTypeSchema)
+)
+  .id("values-schema")
+  .required();
 
 const metricsSchema = Joi.object({
   type: Joi.string()
@@ -58,13 +78,14 @@ const metricsSchema = Joi.object({
     .items(Joi.string().pattern(/^[a-z][a-z0-9_]*$/i))
     .optional(),
   buckets: Joi.array().optional().items(Joi.number()),
-  values: Joi.alternatives(
-    metricValueTypeSchema,
-    Joi.array().items(metricValueTypeSchema)
-  ).required(),
+  values: metricsValuesSchema,
 });
 
 export default Joi.object({
+  general: Joi.object({
+    port: Joi.number(),
+    path: Joi.string(),
+  }),
   helpers: Joi.array().optional().items(Joi.string()),
   data: dataSchema,
   metrics: Joi.object().pattern(/^[a-z][a-z0-9_]*/i, metricsSchema),

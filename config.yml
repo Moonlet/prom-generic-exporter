@@ -14,6 +14,14 @@ data:
     params:
       - 9AVaowib8ePah1VdJft6mgZtYQcHgLA4y1TAEV22Jhan
     interval: 15s
+  ethBalance:
+    type: jsonrpc
+    url: https://mainnet.infura.io/v3/3e3f23306fd3481292e9ed4fde99c664
+    method: eth_getBalance
+    params:
+      - "0xf6bBff224fB36f98b3aa74adf1202B3019126405"
+      - latest
+    interval: 15s
   solVersion:
     type: jsonrpc
     url: https://api.mainnet-beta.solana.com
@@ -51,8 +59,16 @@ metrics:
           on: $data.loopTest.data.validators
           where: "$item.account_id === 'moonlet.poolv1.near'"
           values:
-            labels:
-              account_id: $item.account_id
-            value: "$item.is_slashed ? 1 : 0"
-        labels:
-          - "123"
+            - labels:
+                account_id: $item.account_id
+              value: "$item.is_slashed ? 1 : 0"
+
+  eth_balance:
+    type: gauge
+    help: "ETH balance test"
+    labels:
+      - address
+    values:
+      - labels:
+          address: $config.ethBalance.params[0]
+        value: $helpers.fromAtomic($helpers.fromHex($data.ethBalance.data.result),18)

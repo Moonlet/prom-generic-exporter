@@ -6,6 +6,8 @@ import {
   RestDataSource,
 } from "../config";
 
+import * as helpers from "../helpers";
+
 const parseDuration = (value: string): number => {
   const matches = value.match(/(\d+)(s|m|h)?/);
   if (matches) {
@@ -36,14 +38,26 @@ const state: {
     };
   };
   subscribers: Function[];
+  helpers: any;
 } = {
   interval: setInterval(() => undefined, 1000), // TODO find a valid initial value
   data: {},
   subscribers: [],
+  helpers: {},
 };
 
 export const start = (config: IConfig) => {
   if (state.interval) clearInterval(state.interval);
+
+  config.helpers?.map((helpersPath) => {
+    try {
+      const helpers = require(helpersPath);
+      state.helpers = {
+        ...state.helpers,
+        ...helpers,
+      };
+    } catch {}
+  });
 
   Object.keys(config.data).map((key) => {
     state.data[key] = {
@@ -65,6 +79,7 @@ export const start = (config: IConfig) => {
       ) {
         fetchData(key, state.data[key].config).then(
           (data) => {
+            // console.log(key, data);
             state.data[key].data = data;
             state.data[key].lastFetch = Date.now();
             state.subscribers.map((fn) => fn());
@@ -125,9 +140,14 @@ export const getDataContext = () => {
   const context: {
     $config: { [key: string]: DataSource };
     $data: { [key: string]: any };
+    $helpers: any;
   } = {
     $config: {},
     $data: {},
+    $helpers: {
+      ...helpers,
+      ...state.helpers,
+    },
   };
 
   Object.keys(state.data).map((key) => {

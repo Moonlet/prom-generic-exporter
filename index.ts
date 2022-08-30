@@ -18,9 +18,18 @@ if (!fs.existsSync(configPath)) {
 
 // console.log(configPath);
 
-const config: IConfig = yml.load(
+const ymlConfig: IConfig = yml.load(
   fs.readFileSync(configPath, "utf8")
 ) as IConfig;
+
+const config = {
+  ...ymlConfig,
+  general: {
+    port: 9975,
+    path: "/metrics",
+    ...ymlConfig.general,
+  },
+} as IConfig;
 
 // console.log(config);
 
@@ -37,11 +46,13 @@ DataFetcher.start(config);
 Metrics.init(config);
 
 const app: any = express();
-app.get("/metrics", async (req: any, res: any) => {
+app.get(`${config?.general?.path}`, async (req: any, res: any) => {
   res.setHeader("Content-Type", "text/plain");
   // res.send("Aloha!!!");
   res.send(await Metrics.getMetrics());
 });
-app.listen(8080, () => {
-  console.log("Listening on 8080...");
+app.listen(config?.general?.port as number, () => {
+  console.log(
+    `Listening on port: ${config?.general?.port} path: ${config?.general?.path} ...`
+  );
 });

@@ -59,6 +59,10 @@ interface Metric {
 }
 
 export interface IConfig {
+  general?: {
+    port?: number;
+    path?: string;
+  };
   helpers?: string[]; // a list of js files paths relative to json config file
   data: {
     [key: string]: DataSource;
@@ -67,4 +71,3 @@ export interface IConfig {
     [basename: string]: Metric;
   };
 }
-
