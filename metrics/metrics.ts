@@ -85,6 +85,30 @@ const getValues = (
 
   conf.map((valueConfig) => {
     if (valueConfig.loop) {
+      const iter = wrappedEval(valueConfig.loop.on, context);
+      try {
+        if (typeof iter === "object") {
+          Object.keys(iter).map((key) => {
+            const item = iter[key];
+            const loopContext = {
+              ...context,
+              $key: key,
+              [valueConfig.loop.as || "$item"]: item,
+            };
+            if (
+              valueConfig.loop.where &&
+              !wrappedEval(valueConfig.loop.where, loopContext)
+            ) {
+              // ignore value
+              return;
+            }
+
+            values.push(
+              ...getValues(valueConfig.loop.values as any, loopContext)
+            );
+          });
+        }
+      } catch {}
     } else {
       try {
         //   console.log(valueConfig.labels, getLabels(valueConfig.labels, context));

@@ -43,6 +43,7 @@ const metricValueTypeSchema = getMetricValueSchema(true)
     loop: Joi.object({
       on: Joi.string().required(),
       as: Joi.string().optional(),
+      where: Joi.string().optional(),
       values: getMetricValueSchema(false),
     }),
   })

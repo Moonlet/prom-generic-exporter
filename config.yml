@@ -19,6 +19,10 @@ data:
     url: https://api.mainnet-beta.solana.com
     method: getVersion
     interval: 15s
+  loopTest:
+    type: json
+    url: http://65.108.45.172:3030/status
+    interval: 15s
 metrics:
   balance:
     type: gauge
@@ -37,3 +41,18 @@ metrics:
       - labels:
           version: "$data.solVersion.data.result['solana-core']"
         value: "1"
+  is_slashed:
+    type: gauge
+    help: "Node version"
+    labels:
+      - account_id
+    values:
+      - loop:
+          on: $data.loopTest.data.validators
+          where: "$item.account_id === 'moonlet.poolv1.near'"
+          values:
+            labels:
+              account_id: $item.account_id
+            value: "$item.is_slashed ? 1 : 0"
+        labels:
+          - "123"

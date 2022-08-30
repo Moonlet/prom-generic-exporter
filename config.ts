@@ -32,9 +32,14 @@ export interface ShellDataSource {
 export type DataSource = CommonDataSource &
   (RestDataSource | ShellDataSource | JsonRpcDataSource);
 
+interface IFilters {
+  [key: string]: string | number | (string | number)[];
+}
+
 interface MetricValueLoop {
   on: string;
   as?: string;
+  where?: string;
   values: MetricValue | MetricValue[];
 }
 
@@ -62,3 +67,4 @@ export interface IConfig {
     [basename: string]: Metric;
   };
 }
+
