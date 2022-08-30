@@ -9,9 +9,13 @@ import * as Metrics from "./metrics/metrics";
 import { IConfig } from "./config";
 import express from "express";
 
-const configPath = process.argv[2];
+let configPath = process.argv[2];
 
-if (!fs.existsSync(configPath)) {
+if (fs.existsSync(configPath)) {
+  // all ok
+} else if (fs.existsSync(path.resolve(process.cwd(), configPath))) {
+  configPath = path.resolve(process.cwd(), configPath);
+} else {
   console.error("Config file is mandatory.");
   console.log("Usage: ");
 }
