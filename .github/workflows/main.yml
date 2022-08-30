@@ -53,7 +53,7 @@ jobs:
           pnpm run build
           cd build
           npm install --production node-linux-x64@lts
-          chmod +x agent
+          chmod +x prom-generic-exporter
           npm version --commit-hooks false --git-tag-version false $INPUT_VERSION
           VERSION=$(node -e "console.log(require('./package.json').version)")
           APP_NAME=$(node -e "console.log(require('./package.json').name)")
