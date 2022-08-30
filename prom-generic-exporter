@@ -2,4 +2,4 @@
 
 BIN_PATH=$(dirname $0)
 
-(cd $BIN_PATH && node_modules/.bin/node index.js $1)
+$BIN_PATH/node_modules/.bin/node $BIN_PATH/index.js $1
