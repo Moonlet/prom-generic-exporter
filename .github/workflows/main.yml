@@ -50,8 +50,8 @@ jobs:
           INPUT_VERSION: ${{ github.event.inputs.version }}
           # ln -s $PWD/node_modules/.pnpm $PWD/packages/agent/node_modules/.pnpm
         run: |
-          pnpm run build
           npm version --commit-hooks false --git-tag-version false $INPUT_VERSION
+          pnpm run build
           cd build
           npm install --production node-linux-x64@lts
           chmod +x prom-generic-exporter
