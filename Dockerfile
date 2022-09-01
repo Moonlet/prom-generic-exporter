@@ -1,13 +1,12 @@
 FROM node:14-alpine as builder
-
 ADD build /app
+RUN curl -L https://unpkg.com/@pnpm/self-installer | node
 WORKDIR /app
-RUN npm install --omit=dev
+RUN pnpm install --prod
 
+FROM node:14-alpine
+# ADD build /app
+COPY --from=builder /app /app
+WORKDIR /app
 
-# FROM node:14-alpine
-# # ADD build /app
-# COPY --from=builder /app /app
-# WORKDIR /app
-
-CMD ["/app/prom-generic-exporter", "/config/config.yml"]
+CMD ["node", "/app/index.js", "/config/config.yml"]

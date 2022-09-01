@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node src/index.ts config.yml",
-    "build": "rm -rf build && tsc && cp package.json build && cp prom-generic-exporter build",
+    "build": "rm -rf build && tsc && cp package.json build && cp pnpm-lock.yaml build && cp prom-generic-exporter build",
     "docker": "npm run build && docker build . --file ./Dockerfile"
   },
   "dependencies": {
