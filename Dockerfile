@@ -1,6 +1,6 @@
 FROM node:14-alpine as builder
 ADD build /app
-RUN curl -L https://unpkg.com/@pnpm/self-installer | node
+RUN npm install -g pnpm
 WORKDIR /app
 RUN pnpm install --prod
 
