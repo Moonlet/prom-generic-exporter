@@ -29,7 +29,7 @@ data:
     interval: 15s
   loopTest:
     type: json
-    url: http://65.108.45.172:3030/status
+    url: https://rpc.mainnet.near.org/status
     interval: 15s
 metrics:
   balance:
