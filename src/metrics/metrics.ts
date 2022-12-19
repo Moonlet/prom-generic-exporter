@@ -108,15 +108,19 @@ const getValues = (
             );
           });
         }
-      } catch {}
+      } catch (e) {
+        console.error(e);
+      }
     } else {
       try {
-        //   console.log(valueConfig.labels, getLabels(valueConfig.labels, context));
+        // console.log(valueConfig.labels, getLabels(valueConfig.labels, context));
         values.push([
           getLabels(valueConfig.labels, context),
           wrappedEval(valueConfig.value, context, false),
         ]);
-      } catch {}
+      } catch (e) {
+        console.error(e);
+      }
     }
   });
 
@@ -127,7 +131,11 @@ const getValues = (
 DataFetcher.subscribe(() => {
   const context = DataFetcher.getDataContext();
   Object.keys(state.metrics).map((key) => {
-    getValues(state.config.metrics[key].values, context).map((v) => {
+    // console.log(key);
+    const values = getValues(state.config.metrics[key].values, context);
+    // console.log(values);
+    values.map((v) => {
+      // console.log(v);
       switch (state.config.metrics[key].type) {
         case "counter":
           state.metrics[key].inc(...v);
