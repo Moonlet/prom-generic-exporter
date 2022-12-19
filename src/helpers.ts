@@ -37,3 +37,16 @@ export const fromHex = (data: string): string => {
   // console.log("fromHex", data, BigInt(data).toString());
   return BigInt(data).toString();
 };
+
+export const getValue = (
+  data: any,
+  path: any[],
+  defaultValue: any = undefined
+): any => {
+  if (path.length === 0) return data;
+
+  if (Object.keys(data).find((k) => k == path[0])) {
+    return getValue(data[path[0]], path.slice(1), defaultValue);
+  }
+  return defaultValue;
+};

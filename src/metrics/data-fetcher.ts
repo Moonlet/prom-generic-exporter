@@ -84,7 +84,10 @@ export const start = (config: IConfig) => {
             state.data[key].lastFetch = Date.now();
             state.subscribers.map((fn) => fn());
           },
-          (error) => console.error(error)
+          (error) => {
+            state.data[key].lastFetch = Date.now();
+            console.error("Error while fetching " + key + ": " + error.message);
+          }
         );
       }
     });

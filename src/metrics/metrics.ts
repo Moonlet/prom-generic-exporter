@@ -119,7 +119,7 @@ const getValues = (
           wrappedEval(valueConfig.value, context, false),
         ]);
       } catch (e) {
-        console.error(e);
+        //console.error(e);
       }
     }
   });
