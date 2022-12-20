@@ -34,6 +34,7 @@ const state: {
     [key: string]: {
       config: DataSource;
       lastFetch: number;
+      abortController?: AbortController;
       data: any;
     };
   };
@@ -77,15 +78,25 @@ export const start = (config: IConfig) => {
         Date.now() - state.data[key].lastFetch >=
         parseDuration(state.data[key].config.interval)
       ) {
-        fetchData(key, state.data[key].config).then(
+        state.data[key].abortController?.abort(
+          "Cancelled current fetch instace of " + key
+        );
+        state.data[key].abortController = new AbortController();
+        state.data[key].lastFetch = Date.now();
+
+        fetchData(
+          key,
+          state.data[key].config,
+          state.data[key].abortController?.signal
+        ).then(
           (data) => {
             // console.log(key, data);
             state.data[key].data = data;
-            state.data[key].lastFetch = Date.now();
             state.subscribers.map((fn) => fn());
+            delete state.data[key].abortController;
           },
           (error) => {
-            state.data[key].lastFetch = Date.now();
+            // delete state.data[key].abortController;
             console.error("Error while fetching " + key + ": " + error.message);
           }
         );
@@ -94,8 +105,13 @@ export const start = (config: IConfig) => {
   }, 1000);
 };
 
-const fetchData = async (key: string, config: DataSource) => {
+const fetchData = async (
+  key: string,
+  config: DataSource,
+  signal?: AbortSignal
+) => {
   console.log("Fetching datasource", key);
+
   // "json" | "jsonrpc" | "shell"
   switch (config.type) {
     case "json":
@@ -103,6 +119,7 @@ const fetchData = async (key: string, config: DataSource) => {
       return axios
         .request({
           url: reqConf.url,
+          signal,
           method: reqConf.method || "get",
           data: reqConf.body,
         })
@@ -115,6 +132,7 @@ const fetchData = async (key: string, config: DataSource) => {
         .request({
           url: rpcConf.url,
           method: "post",
+          signal,
           data: {
             id: Math.floor(Math.random() * 1000000),
             jsonrpc: "2.0",
@@ -145,10 +163,10 @@ export const getDataContext = () => {
     $data: { [key: string]: any };
     $helpers: any;
   } = {
+    ...helpers,
     $config: {},
     $data: {},
     $helpers: {
-      ...helpers,
       ...state.helpers,
     },
   };
