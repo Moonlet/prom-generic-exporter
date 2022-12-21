@@ -4,7 +4,7 @@ RUN npm install -g pnpm
 WORKDIR /app
 RUN pnpm install --prod
 
-FROM node:14-alpine
+FROM node:16-alpine
 # ADD build /app
 COPY --from=builder /app /app
 WORKDIR /app
