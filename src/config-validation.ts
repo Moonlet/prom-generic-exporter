@@ -78,6 +78,7 @@ const metricsSchema = Joi.object({
     .items(Joi.string().pattern(/^[a-z][a-z0-9_]*$/i))
     .optional(),
   buckets: Joi.array().optional().items(Joi.number()),
+  resetOnUpdate: Joi.boolean().optional(),
   values: metricsValuesSchema,
 });
 

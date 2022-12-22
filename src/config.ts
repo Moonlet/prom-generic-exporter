@@ -55,6 +55,7 @@ interface Metric {
   help?: string;
   labels?: string[];
   buckets?: number[];
+  resetOnUpdate?: boolean;
   values: MetricValueType | MetricValueType[];
 }
 

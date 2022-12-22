@@ -134,6 +134,9 @@ DataFetcher.subscribe(() => {
     // console.log(key);
     const values = getValues(state.config.metrics[key].values, context);
     // console.log(values);
+    if (state.config.metrics[key].resetOnUpdate) {
+      state.metrics[key]?.reset();
+    }
     values.map((v) => {
       // console.log(v);
       switch (state.config.metrics[key].type) {
@@ -142,6 +145,7 @@ DataFetcher.subscribe(() => {
           break;
         case "gauge":
           state.metrics[key].set(...v);
+
           break;
         case "histogram":
           state.metrics[key].observe(...v);
