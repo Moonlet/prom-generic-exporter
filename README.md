@@ -232,7 +232,7 @@ Poperties:
       values:
         - labels:
             address: $config.ethBalance.params[0]
-            value: $helpers.fromAtomic($helpers.fromHex($data.ethBalance.data.result),18)
+            value: fromAtomic(fromHex($data.ethBalance.data.result),18)
   ```
 
   **$config** - reference to `data` config object
@@ -308,7 +308,7 @@ module.exports = {
   percent: (input, max) => Math.round((input / max) * 100, 2),
   otherExample: function (param) {
     return parseInt(param) + 1;
-  },
+  }
 };
 ```
 
