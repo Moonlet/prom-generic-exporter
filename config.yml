@@ -71,4 +71,4 @@ metrics:
     values:
       - labels:
           address: $config.ethBalance.params[0]
-        value: $helpers.fromAtomic($helpers.fromHex($data.ethBalance.data.result),18)
+        value: fromAtomic(fromHex($data.ethBalance.data.result),18)
