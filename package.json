@@ -26,6 +26,6 @@
     "ts-node": "^10.9.1"
   },
   "resolutions": {
-        "semver": "7.5.2"
-    }
+    "semver": "7.5.2"
+  }
 }
