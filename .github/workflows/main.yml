@@ -66,13 +66,19 @@ jobs:
           commit_message: Version bump
           file_pattern: package.json
 
+      - name: Show files
+        run: |
+          ...
+          echo "Files created"
+          ls -la
+
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: |
-            ${APP_NAME}-linux-x64-${VERSION}
-            ${APP_NAME}-linux-x64-${VERSION}.tar.gz
+            build/${APP_NAME}-linux-x64-${VERSION}
+            build/${APP_NAME}-linux-x64-${VERSION}.tar.gz
           tag: ${{ env.APP_TAG }}
           overwrite: true
           file_glob: true
