@@ -60,6 +60,8 @@ jobs:
           docker push krisboit/prom-generic-exporter:${VERSION}
 
           echo "APP_TAG=${APP_NAME}-v${VERSION}" >> $GITHUB_ENV
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
@@ -76,8 +78,8 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: |
-            build/${APP_NAME}-linux-x64-${VERSION}
-            build/${APP_NAME}-linux-x64-${VERSION}.tar.gz
+            ${{ env.APP_NAME }}-linux-x64-${{ env.VERSION }}
+            ${{ env.APP_NAME }}-linux-x64-${{ env.VERSION }}.tar.gz
           tag: ${{ env.APP_TAG }}
           overwrite: true
           file_glob: true
