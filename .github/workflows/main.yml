@@ -60,29 +60,17 @@ jobs:
           docker push krisboit/prom-generic-exporter:${VERSION}
 
           echo "APP_TAG=${APP_NAME}-v${VERSION}" >> $GITHUB_ENV
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
-
-          echo "FILE_PATH_1=${APP_NAME}-linux-x64-${VERSION}" >> $GITHUB_ENV
-          echo "FILE_PATH_2=${APP_NAME}-linux-x64-${VERSION}.tar.gz" >> $GITHUB_ENV
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Version bump
           file_pattern: package.json
 
-      - name: Show files
-        run: |
-          echo "Files created"
-          echo "FILE_PATH_1=${{ env.FILE_PATH_1 }}"
-          echo "FILE_PATH_2=${{ env.FILE_PATH_2 }}"
-          ls -la
-
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: "${{ env.FILE_PATH_1 }}"
+          file: "*-linux-x64-*"
           tag: ${{ env.APP_TAG }}
           overwrite: true
-          file_glob: false # true
+          file_glob: true
