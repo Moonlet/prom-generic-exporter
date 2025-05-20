@@ -22,13 +22,16 @@ jobs:
 
       - uses: pnpm/action-setup@v2.1.0
         with:
-          version: 7.9.5
+          version: 8.6.0
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Clear pnpm cache
+        run: pnpm store prune
 
       - name: Install dependencies
         run: pnpm install
