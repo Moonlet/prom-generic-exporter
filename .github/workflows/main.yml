@@ -87,4 +87,4 @@ jobs:
             # ${{ env.APP_NAME }}-linux-x64-${{ env.VERSION }}.tar.gz
           tag: ${{ env.APP_TAG }}
           overwrite: true
-          file_glob: true
+          file_glob: false # true
