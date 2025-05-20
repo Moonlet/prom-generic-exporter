@@ -1,12 +1,6 @@
 name: Prometheus Generic Exporter Build
 
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  #   push:
-  #     branches: [ master ]
-  #   pull_request:
-  #     branches: [ master ]
-
   workflow_dispatch:
     inputs:
       version:
@@ -55,6 +49,7 @@ jobs:
           APP_NAME=$(node -e "console.log(require('./package.json').name)")
           cd ..
           mv build ${APP_NAME}-linux-x64-${VERSION}
+          chmod -R +x ${APP_NAME}-linux-x64-${VERSION}
           tar -czvf ${APP_NAME}-linux-x64-${VERSION}.tar.gz ${APP_NAME}-linux-x64-${VERSION}
 
           pnpm run docker \
@@ -75,7 +70,9 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: "*.tar.gz"
+          file: |
+            ${APP_NAME}-linux-x64-${VERSION}
+            ${APP_NAME}-linux-x64-${VERSION}.tar.gz
           tag: ${{ env.APP_TAG }}
           overwrite: true
           file_glob: true
