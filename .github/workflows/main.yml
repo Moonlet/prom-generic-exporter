@@ -63,6 +63,9 @@ jobs:
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
 
+          echo "FILE_PATH_1=${APP_NAME}-linux-x64-${VERSION}" >> $GITHUB_ENV
+          echo "FILE_PATH_2=${APP_NAME}-linux-x64-${VERSION}.tar.gz" >> $GITHUB_ENV
+
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Version bump
@@ -78,8 +81,10 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: |
-            ${{ env.APP_NAME }}-linux-x64-${{ env.VERSION }}
-            ${{ env.APP_NAME }}-linux-x64-${{ env.VERSION }}.tar.gz
+            ${{ env.FILE_PATH_1 }}
+            ${{ env.FILE_PATH_2 }}
+            # ${{ env.APP_NAME }}-linux-x64-${{ env.VERSION }}
+            # ${{ env.APP_NAME }}-linux-x64-${{ env.VERSION }}.tar.gz
           tag: ${{ env.APP_TAG }}
           overwrite: true
           file_glob: true
