@@ -21,7 +21,7 @@ docker run -it krisboit/prom-generic-exporter:latest node /app/index.js <path to
 
 ### Prebuild version (linux-x64)
 
-Go to: [Releases page](https://github.com/Moonlet/prom-generic-exporter/releases) and download the latest version.
+Go to: [Releases page](https://github.com/MoonletLabs/prom-generic-exporter/releases) and download the latest version.
 
 _**Note:** you don't need nodeJS to run it._
 
