@@ -74,6 +74,8 @@ jobs:
       - name: Show files
         run: |
           echo "Files created"
+          echo "FILE_PATH_1=${{ env.FILE_PATH_1 }}"
+          echo "FILE_PATH_2=${{ env.FILE_PATH_2 }}"
           ls -la
 
       - name: Upload binaries to release
@@ -83,8 +85,6 @@ jobs:
           file: |
             ${{ env.FILE_PATH_1 }}
             ${{ env.FILE_PATH_2 }}
-            # ${{ env.APP_NAME }}-linux-x64-${{ env.VERSION }}
-            # ${{ env.APP_NAME }}-linux-x64-${{ env.VERSION }}.tar.gz
           tag: ${{ env.APP_TAG }}
           overwrite: true
           file_glob: false # true
